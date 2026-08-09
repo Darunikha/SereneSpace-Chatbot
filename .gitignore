@@ -1,0 +1,27 @@
+# Python virtual environment and cache
+backend/venv/
+backend/__pycache__/
+backend/.pytest_cache/
+.pytest_cache/
+*.pyc
+
+# Local secrets
+backend/.env
+.env
+
+# Vector store database binaries (optional to gitignore so it can rebuild from seed documents)
+backend/data/vector_store/
+data/vector_store/
+
+# Node dependencies and production build outputs
+frontend/node_modules/
+frontend/dist/
+node_modules/
+dist/
+
+# OS/IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.gemini/
