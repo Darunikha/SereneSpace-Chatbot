@@ -79,9 +79,9 @@ export default function ChatWindow() {
   ];
 
   return (
-    <div className="chat-page container-limit">
+    <div className="chat-page">
       {/* Messages */}
-      <div className="chat-messages-container">
+      <div className="chat-messages-container container-limit">
         {messages.map((msg) => (
           <div key={msg.id} className={`message-row ${msg.sender}`}>
 
@@ -158,7 +158,7 @@ export default function ChatWindow() {
 
       {/* Suggestion chips — shown only when chat is fresh */}
       {messages.length === 1 && !loading && (
-        <div className="suggestion-chips">
+        <div className="suggestion-chips container-limit">
           <span className="chip-label">Suggested questions:</span>
           {suggestions.map((s, i) => (
             <button key={i} className="chip" onClick={() => handleSend(s)}>
@@ -170,7 +170,7 @@ export default function ChatWindow() {
 
       {/* Input */}
       <div className="chat-input-area">
-        <form className="chat-input-form" onSubmit={handleSubmit}>
+        <form className="chat-input-form container-limit" onSubmit={handleSubmit}>
           <input
             className="chat-input"
             type="text"
