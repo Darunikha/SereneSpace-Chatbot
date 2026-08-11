@@ -173,7 +173,7 @@ export default function MoodTracker() {
                       outline: 'none'
                     }}
                   >
-                    <span style={{ fontSize: '2rem', marginBottom: '0.25rem', transform: isSelected ? 'scale(1.15)' : 'none', transition: 'transform 0.2s' }}>
+                    <span className="mood-emoji" style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>
                       {mood.emoji}
                     </span>
                     <span style={{ 

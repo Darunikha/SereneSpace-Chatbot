@@ -1122,3 +1122,20 @@ body {
     grid-template-columns: repeat(3, 1fr) !important;
   }
 }
+
+.mood-emoji {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-block;
+}
+
+.mood-option-btn.selected .mood-emoji {
+  transform: scale(1.22);
+  animation: moodEmojiBounce 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes moodEmojiBounce {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.4) translateY(-10px); }
+  65% { transform: scale(1.15) translateY(2px); }
+  100% { transform: scale(1.22) translateY(0); }
+}
