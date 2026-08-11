@@ -5,6 +5,7 @@ import LandingPage from './components/LandingPage';
 import ChatWindow from './components/ChatWindow';
 import Exercises from './components/Exercises';
 import SelfCareJourney from './components/SelfCareJourney';
+import MoodTracker from './components/MoodTracker';
 import { checkHealth } from './services/api';
 import './styles/App.css';
 
@@ -100,6 +101,7 @@ export default function App() {
         {view === 'chat'      && <ChatWindow />}
         {view === 'exercises' && <Exercises />}
         {view === 'journey'   && <SelfCareJourney />}
+        {view === 'mood'      && <MoodTracker />}
       </main>
 
       <footer className="app-footer">

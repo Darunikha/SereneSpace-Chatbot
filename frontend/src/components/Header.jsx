@@ -20,6 +20,7 @@ export default function Header({ currentView, onNavigate, darkMode, onToggleDark
             { id: 'chat',      label: 'Chat' },
             { id: 'exercises', label: 'Exercises' },
             { id: 'journey',   label: 'Self-Care' },
+            { id: 'mood',      label: 'Mood Tracker' },
           ].map(({ id, label }) => (
             <button
               key={id}
