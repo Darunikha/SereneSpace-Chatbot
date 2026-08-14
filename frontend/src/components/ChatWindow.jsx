@@ -249,11 +249,14 @@ export default function ChatWindow() {
               <div className="avatar-dot ai">SS</div>
               <div>
                 <div className="bubble-label">SereneSpace</div>
-                <div className="message-bubble" style={{ padding: '0.9rem 1.25rem' }}>
+                <div className="message-bubble" style={{ padding: '0.85rem 1.25rem' }}>
                   <div className="typing-indicator">
-                    <span className="typing-dot" />
-                    <span className="typing-dot" />
-                    <span className="typing-dot" />
+                    <div className="typing-dots-row">
+                      <span className="typing-dot" />
+                      <span className="typing-dot" />
+                      <span className="typing-dot" />
+                    </div>
+                    <span className="typing-label">SereneSpace is thinking…</span>
                   </div>
                 </div>
               </div>

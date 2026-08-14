@@ -13,6 +13,34 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ============================================================
+   GLOBAL CUSTOM SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) var(--bg-secondary);
+}
+
 body {
   font-family: var(--font-family);
   background-color: var(--bg-primary);
@@ -245,9 +273,21 @@ body {
 .feature-card:nth-child(5) { animation-delay: 0.25s; }
 
 .feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--box-shadow-hover);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.13),
+    0 0 0 2px var(--accent-color),
+    0 0 24px 4px rgba(122, 139, 117, 0.22);
   border-color: var(--accent-color);
+}
+
+.feature-card:hover .feature-icon-wrapper {
+  transform: scale(1.18) rotate(-5deg);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.feature-icon-wrapper {
+  transition: transform 0.25s ease;
 }
 
 .feature-icon-wrapper {
@@ -417,22 +457,36 @@ body {
    ============================================================ */
 .typing-indicator {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 6px;
+  padding: 2px 0;
+}
+
+.typing-dots-row {
+  display: flex;
+  align-items: flex-end;
   gap: 5px;
-  padding: 2px 4px;
 }
 
 .typing-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   background-color: var(--accent-color);
   border-radius: 50%;
-  animation: typingBounce 1.3s infinite ease-in-out both;
-  opacity: 0.7;
+  animation: typingWave 1.4s infinite ease-in-out both;
+  opacity: 0.85;
 }
 
-.typing-dot:nth-child(1) { animation-delay: -0.3s; }
-.typing-dot:nth-child(2) { animation-delay: -0.15s; }
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.18s; }
+.typing-dot:nth-child(3) { animation-delay: 0.36s; }
+
+.typing-label {
+  font-size: 0.72rem;
+  color: var(--text-light);
+  letter-spacing: 0.04em;
+  animation: typingFade 1.6s infinite ease-in-out;
+}
 
 /* ============================================================
    CHAT INPUT AREA
@@ -502,8 +556,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
-  padding: 0.5rem 0.25rem 0.5rem 0; /* right padding so chips don't clip */
-  animation: fadeSlideUp 0.4s ease-out;
+  padding: 0.5rem 0.25rem 0.5rem 0;
 }
 
 .chip-label {
@@ -512,6 +565,7 @@ body {
   font-weight: 500;
   margin-bottom: 0.2rem;
   display: block;
+  animation: fadeSlideUp 0.35s ease-out both;
 }
 
 .chip {
@@ -524,15 +578,25 @@ body {
   font-size: 0.8rem;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: var(--transition-fast);
+  transition: border-color 0.2s ease, background-color 0.2s ease,
+              color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
   font-family: var(--font-family);
+  opacity: 0;
+  animation: chipSlideIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
+
+.chip:nth-child(1) { animation-delay: 0.05s; }
+.chip:nth-child(2) { animation-delay: 0.13s; }
+.chip:nth-child(3) { animation-delay: 0.21s; }
+.chip:nth-child(4) { animation-delay: 0.29s; }
+.chip:nth-child(5) { animation-delay: 0.37s; }
 
 .chip:hover {
   border-color: var(--accent-color);
   background-color: var(--accent-light);
   color: var(--accent-color);
-  transform: translateY(-1px);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 12px rgba(122, 139, 117, 0.2);
 }
 
 /* ============================================================
@@ -1041,9 +1105,19 @@ body {
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-@keyframes typingBounce {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-  40%           { transform: scale(1.2); opacity: 1; }
+@keyframes typingWave {
+  0%, 60%, 100% { transform: translateY(0);    opacity: 0.5; }
+  30%           { transform: translateY(-7px); opacity: 1;   }
+}
+
+@keyframes typingFade {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.9; }
+}
+
+@keyframes chipSlideIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
 }
 
 @keyframes breathRingPulse {

@@ -97,11 +97,13 @@ export default function App() {
       )}
 
       <main className="main-content">
-        {view === 'home'      && <LandingPage onNavigate={handleNavigate} />}
-        {view === 'chat'      && <ChatWindow />}
-        {view === 'exercises' && <Exercises />}
-        {view === 'journey'   && <SelfCareJourney />}
-        {view === 'mood'      && <MoodTracker />}
+        <div key={view} style={{ animation: 'fadeSlideUp 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) both', display: 'contents' }}>
+          {view === 'home'      && <LandingPage onNavigate={handleNavigate} />}
+          {view === 'chat'      && <ChatWindow />}
+          {view === 'exercises' && <Exercises />}
+          {view === 'journey'   && <SelfCareJourney />}
+          {view === 'mood'      && <MoodTracker />}
+        </div>
       </main>
 
       <footer className="app-footer">
