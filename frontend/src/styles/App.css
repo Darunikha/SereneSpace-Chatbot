@@ -277,7 +277,7 @@ body {
   box-shadow:
     0 12px 36px rgba(0, 0, 0, 0.13),
     0 0 0 2px var(--accent-color),
-    0 0 24px 4px rgba(122, 139, 117, 0.22);
+    var(--box-shadow-glow);
   border-color: var(--accent-color);
 }
 

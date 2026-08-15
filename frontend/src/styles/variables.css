@@ -46,6 +46,7 @@
   --box-shadow-subtle: 0 2px 10px rgba(0,0,0,0.06);
   --box-shadow-hover: 0 8px 28px rgba(0,0,0,0.12);
   --box-shadow-bubble: 0 2px 8px rgba(0,0,0,0.07);
+  --box-shadow-glow: 0 0 24px 4px rgba(122, 139, 117, 0.22);
 
   /* Header height for chat calc */
   --header-height: 64px;
@@ -81,4 +82,5 @@
   --box-shadow-subtle: 0 2px 10px rgba(0,0,0,0.3);
   --box-shadow-hover: 0 8px 28px rgba(0,0,0,0.4);
   --box-shadow-bubble: 0 2px 8px rgba(0,0,0,0.25);
+  --box-shadow-glow: 0 0 24px 4px rgba(143, 171, 137, 0.28);
 }

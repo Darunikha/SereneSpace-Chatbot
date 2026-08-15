@@ -1,4 +1,8 @@
-/* Cleared default styles. App styling resides in App.css */
+/*
+ * Minimal entry-point reset.
+ * Full reset (box-sizing, scrollbar, font, transitions, etc.)
+ * is handled in App.css via the @import chain.
+ */
 body {
   margin: 0;
   padding: 0;
