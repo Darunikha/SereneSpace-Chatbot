@@ -9,7 +9,7 @@ const LS_SESSION = 'serenespace-current-session';
 const WELCOME_MSG = {
   id: 1,
   sender: 'assistant',
-  text: "Hello. I'm here to share general mental-wellness information, coping strategies, and relaxation techniques.\n\nI'm not a therapist or doctor and cannot diagnose conditions or replace medical care. How can I support you today?",
+  text: "Hey, I'm really glad you're here. 💙\n\nI'm SereneSpace — a mental wellness companion. Whether you're feeling overwhelmed, anxious, struggling to sleep, or just need someone to talk to, I'm here for you.\n\nHow are you feeling today? You can share as little or as much as you'd like.",
   sources: []
 };
 
