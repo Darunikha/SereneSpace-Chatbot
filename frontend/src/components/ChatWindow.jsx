@@ -200,7 +200,7 @@ export default function ChatWindow() {
                 <div className="avatar-dot ai" title="SereneSpace AI">SS</div>
               )}
 
-              <div>
+              <div className="message-content-wrapper">
                 <div className="bubble-label">
                   {msg.sender === 'user' ? 'You' : 'SereneSpace'}
                 </div>
@@ -247,7 +247,7 @@ export default function ChatWindow() {
           {loading && (
             <div className="message-row assistant">
               <div className="avatar-dot ai">SS</div>
-              <div>
+              <div className="message-content-wrapper">
                 <div className="bubble-label">SereneSpace</div>
                 <div className="message-bubble" style={{ padding: '0.85rem 1.25rem' }}>
                   <div className="typing-indicator">
