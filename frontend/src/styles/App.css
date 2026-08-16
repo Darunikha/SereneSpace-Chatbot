@@ -377,7 +377,7 @@ body {
   line-height: 1.65;
   box-shadow: var(--box-shadow-bubble);
   white-space: pre-wrap;
-  word-break: break-word;
+  overflow-wrap: break-word;
   position: relative;
   transition: background-color 0.35s ease, color 0.35s ease;
 }
@@ -387,6 +387,8 @@ body {
   background-color: var(--bubble-user-bg);
   color: var(--bubble-user-text);
   border-bottom-right-radius: 4px;
+  min-width: 4.5rem;
+  width: fit-content;
 }
 
 /* AI bubble */
