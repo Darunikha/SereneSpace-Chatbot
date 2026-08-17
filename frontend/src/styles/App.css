@@ -1051,8 +1051,55 @@ body {
 .chat-toolbar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
   padding-bottom: 0.6rem;
+}
+
+.chat-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chat-mode-toggle {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2px;
+  transition: var(--transition-smooth);
+}
+
+.chat-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: 18px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--font-family);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.chat-mode-btn:hover {
+  color: var(--text-primary);
+}
+
+.chat-mode-btn.active {
+  background-color: var(--accent-color);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(122, 139, 117, 0.25);
+}
+
+[data-theme="dark"] .chat-mode-btn.active {
+  box-shadow: 0 2px 6px rgba(143, 171, 137, 0.35);
 }
 
 .chat-toolbar-btn {

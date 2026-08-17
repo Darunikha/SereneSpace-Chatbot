@@ -43,7 +43,8 @@ async def chat_endpoint(request: ChatMessageRequest):
         llm_response = llm_svc.generate_response(
             query=user_message,
             context_chunks=context_chunks,
-            history=request.history
+            history=request.history,
+            mode=request.mode
         )
 
         return ChatMessageResponse(

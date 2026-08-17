@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, HttpUrl
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Literal
 
 class ChatMessageRequest(BaseModel):
     message: str = Field(
@@ -11,6 +11,10 @@ class ChatMessageRequest(BaseModel):
     history: Optional[List[Dict[str, str]]] = Field(
         default=None,
         description="Optional conversation history as a list of dicts: {'role': 'user'|'assistant', 'content': str}"
+    )
+    mode: Literal["listen", "advice"] = Field(
+        default="advice",
+        description="The chatbot interaction mode: 'listen' for reflective active listening, 'advice' for coping suggestions."
     )
 
 class SourceCitation(BaseModel):

@@ -143,3 +143,53 @@ def test_llm_service_openrouter_mock(mock_post):
     )
     
     assert "daily routine" in response_text
+
+
+@patch("app.services.llm_service.requests.post")
+def test_llm_service_mode_prompts(mock_post):
+    from app.services.llm_service import get_llm_service
+    llm_svc = get_llm_service()
+    
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {
+        "choices": [
+            {
+                "message": {
+                    "content": "Reflective response"
+                }
+            }
+        ]
+    }
+    mock_post.return_value = mock_response
+    llm_svc.api_key = "dummy_key"
+    
+    # Test listen mode
+    llm_svc.generate_response(
+        query="I feel sad",
+        context_chunks=["Some coping info"],
+        history=[],
+        mode="listen"
+    )
+    
+    call_args = mock_post.call_args
+    payload = call_args[1]["json"]
+    system_prompt = payload["messages"][0]["content"]
+    assert "LISTEN MODE" in system_prompt
+    assert "DO NOT offer advice" in system_prompt
+    assert "ADVICE MODE" not in system_prompt
+
+    # Test advice mode
+    llm_svc.generate_response(
+        query="I feel sad",
+        context_chunks=["Some coping info"],
+        history=[],
+        mode="advice"
+    )
+    
+    call_args = mock_post.call_args
+    payload = call_args[1]["json"]
+    system_prompt = payload["messages"][0]["content"]
+    assert "ADVICE MODE" in system_prompt
+    assert "LISTEN MODE" not in system_prompt
+
