@@ -193,3 +193,83 @@ def test_llm_service_mode_prompts(mock_post):
     assert "ADVICE MODE" in system_prompt
     assert "LISTEN MODE" not in system_prompt
 
+
+@patch("app.services.llm_service.requests.post")
+def test_llm_service_mood_context(mock_post):
+    from app.services.llm_service import get_llm_service
+    llm_svc = get_llm_service()
+    
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {
+        "choices": [
+            {
+                "message": {
+                    "content": "Reflective response"
+                }
+            }
+        ]
+    }
+    mock_post.return_value = mock_response
+    llm_svc.api_key = "dummy_key"
+    
+    # 1. Test recently logged mood (within last 24h)
+    from datetime import datetime, timezone, timedelta
+    recent_time = (datetime.now(timezone.utc) - timedelta(minutes=10)).isoformat().replace("+00:00", "Z")
+    
+    mood_payload_recent = {
+        "score": 2,
+        "emoji": "😰",
+        "label": "Stressed",
+        "tags": ["Work", "Sleep"],
+        "note": "A bit worried about tomorrow's presentation.",
+        "date": recent_time
+    }
+    
+    llm_svc.generate_response(
+        query="I feel overwhelmed",
+        context_chunks=["Some coping info"],
+        history=[],
+        mood=mood_payload_recent
+    )
+    
+    call_args = mock_post.call_args
+    payload = call_args[1]["json"]
+    system_prompt = payload["messages"][0]["content"]
+    assert "USER'S MOOD AND CONTEXT" in system_prompt
+    assert "😰 Stressed" in system_prompt
+    assert "Work, Sleep" in system_prompt
+    assert "A bit worried" in system_prompt
+    assert "logged 10 minutes ago" in system_prompt
+    assert "adapt your tone directly to their current state" in system_prompt
+    
+    # 2. Test older logged mood (longer ago, e.g. 2 days)
+    old_time = (datetime.now(timezone.utc) - timedelta(days=2)).isoformat().replace("+00:00", "Z")
+    
+    mood_payload_old = {
+        "score": 1,
+        "emoji": "😢",
+        "label": "Sad",
+        "tags": ["Social"],
+        "note": "Felt lonely.",
+        "date": old_time
+    }
+    
+    llm_svc.generate_response(
+        query="I feel overwhelmed",
+        context_chunks=["Some coping info"],
+        history=[],
+        mood=mood_payload_old
+    )
+    
+    call_args = mock_post.call_args
+    payload = call_args[1]["json"]
+    system_prompt = payload["messages"][0]["content"]
+    assert "USER'S MOOD AND CONTEXT" in system_prompt
+    assert "😢 Sad" in system_prompt
+    assert "Social" in system_prompt
+    assert "Felt lonely" in system_prompt
+    assert "logged 2 days ago" in system_prompt
+    assert "treat it as historical/past context" in system_prompt
+
+

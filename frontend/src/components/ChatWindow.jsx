@@ -108,9 +108,20 @@ export default function ChatWindow() {
     const updatedMessages = [...messages, userMsg];
     setMessages(updatedMessages);
 
+    // Fetch latest mood from localStorage to provide context
+    let latestMood = null;
+    try {
+      const savedMoods = JSON.parse(localStorage.getItem('serenespace-moods')) || [];
+      if (savedMoods.length > 0) {
+        latestMood = savedMoods[0];
+      }
+    } catch (e) {
+      console.error("Failed to parse mood logs for chat context", e);
+    }
+
     try {
       const chatHistory = updatedMessages.slice(1, -1);
-      const result = await sendMessage(query, chatHistory, chatMode);
+      const result = await sendMessage(query, chatHistory, chatMode, latestMood);
 
       setMessages(prev => {
         const next = [
