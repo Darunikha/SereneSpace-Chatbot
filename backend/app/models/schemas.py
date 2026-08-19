@@ -16,10 +16,6 @@ class ChatMessageRequest(BaseModel):
         default="advice",
         description="The chatbot interaction mode: 'listen' for reflective active listening, 'advice' for coping suggestions."
     )
-    mood: Optional[Dict[str, Any]] = Field(
-        default=None,
-        description="Optional latest mood log entry from the user's history."
-    )
 
 class SourceCitation(BaseModel):
     title: str = Field(..., description="Title of the source document")

@@ -6,7 +6,7 @@ const API_BASE_URL = 'http://localhost:8000/api';
  * @param {Array} history - The chat history array of {role, content} objects.
  * @returns {Promise<Object>} The chat response and sources citation.
  */
-export async function sendMessage(message, history = [], mode = 'advice', mood = null) {
+export async function sendMessage(message, history = [], mode = 'advice') {
   try {
     const formattedHistory = history.map(msg => ({
       role: msg.sender === 'user' ? 'user' : 'assistant',
@@ -21,8 +21,7 @@ export async function sendMessage(message, history = [], mode = 'advice', mood =
       body: JSON.stringify({
         message: message,
         history: formattedHistory,
-        mode: mode,
-        mood: mood
+        mode: mode
       }),
     });
 

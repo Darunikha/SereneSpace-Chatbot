@@ -19,8 +19,7 @@ class LLMService:
         query: str,
         context_chunks: List[str],
         history: Optional[List[Dict[str, str]]] = None,
-        mode: str = "advice",
-        mood: Optional[Dict[str, Any]] = None
+        mode: str = "advice"
     ) -> str:
         """
         Formulates the RAG prompt, appends context and history,
@@ -28,62 +27,6 @@ class LLMService:
         """
         # Formulate retrieved context
         context_text = "\n\n---\n\n".join(context_chunks) if context_chunks else "No relevant verified source text retrieved."
-
-        # Parse mood if available
-        mood_context = ""
-        if mood:
-            label = mood.get("label", "Unknown")
-            emoji = mood.get("emoji", "")
-            tags = mood.get("tags", [])
-            note = mood.get("note", "")
-            date_str = mood.get("date", "")
-            
-            # Formulate mood information string
-            mood_info = f"Latest logged mood: {emoji} {label}"
-            if tags:
-                mood_info += f" | Activities/Factors: {', '.join(tags)}"
-            if note:
-                mood_info += f" | Context note: '{note}'"
-            
-            # Check date context if possible
-            date_context = ""
-            if date_str:
-                try:
-                    from datetime import datetime, timezone
-                    # date_str is usually ISO format: e.g., '2026-08-18T10:08:21.000Z'
-                    clean_date_str = date_str.replace("Z", "+00:00")
-                    logged_time = datetime.fromisoformat(clean_date_str)
-                    now = datetime.now(timezone.utc)
-                    diff = now - logged_time
-                    diff_seconds = diff.total_seconds()
-                    
-                    if diff_seconds < 0:
-                        date_context = " (logged just now)"
-                    elif diff_seconds < 3600:
-                        mins = int(diff_seconds // 60)
-                        date_context = f" (logged {mins} minute{'s' if mins != 1 else ''} ago)"
-                    elif diff_seconds < 86400:
-                        hours = int(diff_seconds // 3600)
-                        date_context = f" (logged {hours} hour{'s' if hours != 1 else ''} ago)"
-                    else:
-                        days = int(diff_seconds // 86400)
-                        date_context = f" (logged {days} day{'s' if days != 1 else ''} ago)"
-                except Exception as e:
-                    logger.warning(f"Error parsing mood date: {e}")
-            
-            mood_info += date_context
-            
-            mood_context = (
-                "USER'S MOOD AND CONTEXT:\n"
-                f"{mood_info}\n\n"
-                "INSTRUCTIONS FOR MOOD-AWARE RESPONSE:\n"
-                "1. If this mood was logged recently (e.g., within 24 hours), adapt your tone directly to their current state. "
-                "For example, if they are Sad/Stressed, be extra gentle, validating, and calming. If Happy/Calm, match that warmth. "
-                "Acknowledge the mood/context naturally if it relates to their message.\n"
-                "2. If this mood was logged longer ago (more than 24 hours ago), treat it as historical/past context. "
-                "Do not assume they still feel that way right now, but you can reference it if helpful (e.g. 'I noticed you logged feeling stressed a few days ago, how are things going now?').\n"
-                "3. Keep the validation natural. Do NOT list the mood score or details clinically unless they ask. Be empathetic, human, and conversational."
-            )
 
         # System prompt instructions tailored to the selected mode (listen vs advice)
         if mode == "listen":
@@ -152,11 +95,7 @@ class LLMService:
 
             f"{how_to_respond}\n\n"
             f"{nuances}\n\n"
-            f"{factual_grounding}\n\n"
         )
-
-        if mood_context:
-            system_prompt += f"{mood_context}\n\n"
 
         system_prompt += (
             "VERIFIED REFERENCE MATERIAL:\n"

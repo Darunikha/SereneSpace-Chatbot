@@ -44,8 +44,7 @@ async def chat_endpoint(request: ChatMessageRequest):
             query=user_message,
             context_chunks=context_chunks,
             history=request.history,
-            mode=request.mode,
-            mood=request.mood
+            mode=request.mode
         )
 
         return ChatMessageResponse(
