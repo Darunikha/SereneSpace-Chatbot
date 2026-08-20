@@ -496,45 +496,20 @@ body {
    CITATIONS
    ============================================================ */
 .sources-container {
-  margin-top: 0.85rem;
-  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
   border-top: 1px solid var(--border-color);
-}
-
-.sources-title {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--text-light);
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.sources-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-.source-tag {
-  display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  padding: 0.22rem 0.65rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  text-decoration: none;
-  transition: var(--transition-fast);
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  color: var(--text-light);
+  font-weight: 500;
 }
 
-.source-tag:hover {
-  background-color: var(--accent-light);
-  border-color: var(--accent-color);
+.verified-icon {
   color: var(--accent-color);
-  transform: translateY(-1px);
+  flex-shrink: 0;
 }
 
 /* ============================================================

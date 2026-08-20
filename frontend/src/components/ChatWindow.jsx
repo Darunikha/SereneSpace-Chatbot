@@ -292,26 +292,13 @@ export default function ChatWindow() {
 
                   {msg.sources && msg.sources.length > 0 && (
                     <div className="sources-container">
-                      <div className="sources-title">Verified Sources</div>
-                      <div className="sources-list">
-                        {msg.sources.map((src, srcIdx) => (
-                          <a
-                            key={srcIdx}
-                            href={src.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="source-tag"
-                          >
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none"
-                              stroke="currentColor" strokeWidth="2.5">
-                              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                              <polyline points="15 3 21 3 21 9"/>
-                              <line x1="10" y1="14" x2="21" y2="3"/>
-                            </svg>
-                            {src.organization} — {src.title}
-                          </a>
-                        ))}
-                      </div>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" strokeWidth="2.5" className="verified-icon">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <span>
+                        Verified by {[...new Set(msg.sources.map(s => s.organization))].join(', ')}
+                      </span>
                     </div>
                   )}
                 </div>
