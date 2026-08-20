@@ -31,20 +31,22 @@ export default function App() {
   }, [darkMode]);
 
   // Backend health check
-  useEffect(() => {
-    async function verifyBackend() {
-      try {
-        const health = await checkHealth();
-        if (health && health.status === 'healthy') {
-          setBackendStatus('healthy');
-          setDbLoaded(health.vector_store_loaded);
-        } else {
-          setBackendStatus('offline');
-        }
-      } catch {
+  const verifyBackend = async () => {
+    setBackendStatus('checking');
+    try {
+      const health = await checkHealth();
+      if (health && health.status === 'healthy') {
+        setBackendStatus('healthy');
+        setDbLoaded(health.vector_store_loaded);
+      } else {
         setBackendStatus('offline');
       }
+    } catch {
+      setBackendStatus('offline');
     }
+  };
+
+  useEffect(() => {
     verifyBackend();
   }, []);
 
@@ -75,9 +77,42 @@ export default function App() {
           textAlign: 'center',
           fontSize: '0.78rem',
           color: 'var(--crisis-color)',
+          fontWeight: '600',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.6rem'
+        }}>
+          <span>Backend server is offline or loading. Chat will use local fallback information.</span>
+          <button
+            onClick={verifyBackend}
+            style={{
+              background: 'transparent',
+              border: '1px solid var(--crisis-color)',
+              color: 'var(--crisis-color)',
+              borderRadius: '20px',
+              padding: '0.15rem 0.7rem',
+              fontSize: '0.72rem',
+              fontWeight: '700',
+              cursor: 'pointer'
+            }}
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
+      {backendStatus === 'checking' && (
+        <div style={{
+          backgroundColor: 'var(--bg-secondary)',
+          borderBottom: '1px solid var(--border-color)',
+          padding: '0.4rem 0',
+          textAlign: 'center',
+          fontSize: '0.78rem',
+          color: 'var(--text-secondary)',
           fontWeight: '600'
         }}>
-          Backend server is offline or loading. Chat will use local fallback information.
+          Checking backend connection…
         </div>
       )}
 

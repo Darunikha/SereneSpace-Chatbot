@@ -316,6 +316,7 @@ body {
   flex-direction: column;
   height: calc(100vh - var(--header-height) - 36px); /* 36px = disclaimer */
   width: 100%;
+  position: relative;
 }
 
 .chat-messages-container {
@@ -420,6 +421,75 @@ body {
   letter-spacing: 0.06em;
   color: var(--text-light);
   margin-bottom: 0.35rem;
+}
+
+/* ============================================================
+   COPY BUTTON
+   ============================================================ */
+.copy-msg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.6rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-light);
+  font-size: 0.7rem;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.copy-msg-btn:hover {
+  background-color: var(--accent-light);
+  border-color: var(--border-color);
+  color: var(--accent-color);
+}
+
+/* ============================================================
+   FOLLOW-UP CHIPS
+   ============================================================ */
+.follow-up-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+  animation: fadeSlideUp 0.35s ease-out both;
+}
+
+.chip-small {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.75rem;
+}
+
+/* ============================================================
+   SCROLL-TO-BOTTOM BUTTON
+   ============================================================ */
+.scroll-to-bottom-btn {
+  position: absolute;
+  bottom: 6.5rem;
+  right: 1.5rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--box-shadow-hover);
+  transition: var(--transition-smooth);
+  animation: fadeIn 0.2s ease-out;
+  z-index: 5;
+}
+
+.scroll-to-bottom-btn:hover {
+  transform: translateY(-2px);
+  background-color: var(--accent-light);
 }
 
 /* ============================================================

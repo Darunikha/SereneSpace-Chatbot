@@ -6,6 +6,24 @@ import HistorySidebar from './HistorySidebar';
 const LS_HISTORY = 'serenespace-history';
 const LS_SESSION = 'serenespace-current-session';
 
+const FOLLOW_UP_POOL = [
+  "What are healthy ways to cope with stress?",
+  "Give me a 5-minute breathing exercise.",
+  "What is the 5-4-3-2-1 grounding technique?",
+  "When should I seek professional help?",
+  "How can I improve my sleep habits?",
+  "What's a good way to manage anxious thoughts?",
+  "Can you suggest a quick mindfulness exercise?",
+  "How do I know if what I'm feeling is normal?",
+];
+
+function pickFollowUps(askedTexts, count = 3) {
+  const asked = new Set(askedTexts.map(t => t.toLowerCase().trim()));
+  const pool = FOLLOW_UP_POOL.filter(q => !asked.has(q.toLowerCase().trim()));
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
 const WELCOME_MSG = {
   id: 1,
   sender: 'assistant',
@@ -36,8 +54,11 @@ export default function ChatWindow() {
   const [loading, setLoading]               = useState(false);
   const [historyOpen, setHistoryOpen]       = useState(false);
   const [chatMode, setChatMode]             = useState(() => localStorage.getItem('serenespace-chat-mode') || 'advice');
+  const [showScrollBtn, setShowScrollBtn]   = useState(false);
+  const [copiedId, setCopiedId]             = useState(null);
 
   const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   // Persist chat mode preference
   useEffect(() => {
@@ -151,6 +172,29 @@ export default function ChatWindow() {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(input); }
   };
 
+  // ── Scroll-to-bottom button ────────────────────────────────────────────────
+  const handleScroll = () => {
+    const el = messagesContainerRef.current;
+    if (!el) return;
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    setShowScrollBtn(distanceFromBottom > 200);
+  };
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // ── Copy message text ──────────────────────────────────────────────────────
+  const handleCopy = async (id, text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId((cur) => (cur === id ? null : cur)), 1500);
+    } catch {
+      // clipboard access unavailable — silently ignore
+    }
+  };
+
   // ── History actions ────────────────────────────────────────────────────────
   const handleNewChat = () => {
     setCurrentSessionId(null);
@@ -198,8 +242,12 @@ export default function ChatWindow() {
 
       <div className="chat-page">
         {/* Messages */}
-        <div className="chat-messages-container container-limit">
-          {messages.map((msg) => (
+        <div
+          className="chat-messages-container container-limit"
+          ref={messagesContainerRef}
+          onScroll={handleScroll}
+        >
+          {messages.map((msg, idx) => (
             <div key={msg.id} className={`message-row ${msg.sender}`}>
 
               {msg.sender === 'assistant' && (
@@ -220,13 +268,35 @@ export default function ChatWindow() {
                 >
                   <div>{msg.text}</div>
 
+                  {msg.sender === 'assistant' && !msg.isError && (
+                    <button
+                      type="button"
+                      className="copy-msg-btn"
+                      onClick={() => handleCopy(msg.id, msg.text)}
+                      title="Copy response"
+                      aria-label="Copy response to clipboard"
+                    >
+                      {copiedId === msg.id ? (
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                      ) : (
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="9" y="9" width="13" height="13" rx="2"/>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                      )}
+                      {copiedId === msg.id ? 'Copied' : 'Copy'}
+                    </button>
+                  )}
+
                   {msg.sources && msg.sources.length > 0 && (
                     <div className="sources-container">
                       <div className="sources-title">Verified Sources</div>
                       <div className="sources-list">
-                        {msg.sources.map((src, idx) => (
+                        {msg.sources.map((src, srcIdx) => (
                           <a
-                            key={idx}
+                            key={srcIdx}
                             href={src.url}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -245,6 +315,17 @@ export default function ChatWindow() {
                     </div>
                   )}
                 </div>
+
+                {/* Follow-up suggestion chips after the latest assistant reply */}
+                {msg.sender === 'assistant' && !msg.isError && idx === messages.length - 1 && !loading && idx > 0 && (
+                  <div className="follow-up-chips">
+                    {pickFollowUps(messages.filter(m => m.sender === 'user').map(m => m.text)).map((q, i) => (
+                      <button key={i} className="chip chip-small" onClick={() => handleSend(q)}>
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -271,6 +352,21 @@ export default function ChatWindow() {
 
           <div ref={messagesEndRef} />
         </div>
+
+        {/* Scroll-to-bottom button */}
+        {showScrollBtn && (
+          <button
+            type="button"
+            className="scroll-to-bottom-btn"
+            onClick={scrollToBottom}
+            title="Scroll to latest message"
+            aria-label="Scroll to latest message"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+          </button>
+        )}
 
         {/* Suggestion chips */}
         {messages.length === 1 && !loading && (
